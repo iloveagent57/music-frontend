@@ -14,7 +14,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    //sourceMapFilename: 'bundle.map.js'
+    publicPath: '/src/'
   },
   devServer: {
     port: PORT,
@@ -44,7 +44,7 @@ module.exports = {
       }
     ],
   },
-  //devtool: 'source-map',
+  devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],

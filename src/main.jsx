@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import ReactAudioPlayer from 'react-audio-player';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import CardGroup from 'react-bootstrap/CardGroup';
 
 
 function App() {
@@ -14,8 +19,10 @@ function App() {
   useEffect(() => {
     const fetchPerformances = () => {
       setIsLoading(true);
-      fetch('http://localhost:8000/ia/search_collections/?query=moe').then(response => {
-        setAllPerformances(response.json().result);
+      fetch('http://localhost:8000/ia/search_collections/?query=moe').then(
+        response => response.json()
+      ).then(data => {
+        setAllPerformances(data.result);
         setIsLoading(false);  // set loading to false here, after data is loaded asnchronously.
       });
     };
@@ -36,23 +43,34 @@ function App() {
         <Toast.Body>{`Loading the data`}</Toast.Body>
       </Toast>
 
-      <ul>
-      {allPerformances.map(performance => {
-        return (
-          <li>
-            <Button
-              onClick={() => renderSongs(performance)}
-            >{performance.metadata.title}</Button>
-          </li>
-        )
-        })
-      }
-      </ul>
-      <ReactAudioPlayer
-        src={currentSong}
-        controls  
-      />
-
+      {allPerformances?.length && (
+        <Container>
+          <CardGroup>
+          {allPerformances.map(performance => {
+            return (
+              <Col lg={`auto`}>
+                <Card style={{ width: '18rem' }}>
+                  <Card.Img variant="top" src="holder.js/100px180" />
+                  <Card.Body>
+                    <Card.Title>{performance.metadata.title}</Card.Title>
+                    <Button onClick={() => renderSongs(performance)}>
+                      {`Show songs`}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            )
+          })
+          }
+          </CardGroup>
+          <Row>
+            <ReactAudioPlayer
+              src={currentSong}
+              controls  
+            />
+          </Row>
+        </Container>
+      )}
     </React.Fragment>
   );
 }
