@@ -1,3 +1,16 @@
+#TODO
+** get some images loaded into the API response payload.
+** pagination
+** search box so we can play things other than moe.
+** Get a reliable title/name for every track from the API
+
+#2022-02-15
+* Got project to a point where there's a playlist container on the left to show songs to click and autoplay.
+* audio player in it's own row at the bottom.
+* Learned/remembered: Object.keys(someObject).length and Object.values(someObject).map()
+* Learned/remembered: Object.assign({}, ...someList.map(entry => ({[entry.identifier]: entry}))) to turn a list
+of objects into an object mapping those object identifiers to the objects themselves.
+
 # 2022-02-09
 * Created git repo for this project.
 * Set up index.js file in line with react-bootstrap example at https://codesandbox.io/s/github/react-bootstrap/code-sandbox-examples/tree/master/basic-v5?file=/src/App.js:392-614
@@ -18,11 +31,3 @@
 * Tried playing with bootstrap rows and columns, remember you have to check for something to be truthy before trying
  to map() it into components.
 * CardGroup and Card are more what I want.
-* TODO:
-** get some images loaded into the API response payload.
-** make some kind of container on the side to show rows of songs to click/play
-** on show card click, something like `setCurrentPerformance(performance)`
-** probably want a dict of performances by identifier, rather than a single list.
-** put the audio player in that side container.
-** pagination
-** search box so we can play things other than moe.
