@@ -94,6 +94,7 @@ function App() {
             <ReactAudioPlayer
               src={currentSong}
               controls
+              autoPlay={true}
             />
           </Col>
         </Row>
