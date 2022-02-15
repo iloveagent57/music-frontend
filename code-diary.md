@@ -1,10 +1,10 @@
-#TODO
+# TODO
 ** get some images loaded into the API response payload.
 ** pagination
 ** search box so we can play things other than moe.
 ** Get a reliable title/name for every track from the API
 
-#2022-02-15
+# 2022-02-15
 * Got project to a point where there's a playlist container on the left to show songs to click and autoplay.
 * audio player in it's own row at the bottom.
 * Learned/remembered: Object.keys(someObject).length and Object.values(someObject).map()
