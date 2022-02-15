@@ -13,7 +13,7 @@ import CardGroup from 'react-bootstrap/CardGroup';
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  //let [allSongs, setAllSongs] = useState(null);
+  const [playlist, setPlaylist] = useState([]);
   const [allPerformances, setAllPerformances] = useState({});
 
   useEffect(() => {
@@ -22,7 +22,12 @@ function App() {
       fetch('http://localhost:8000/ia/search_collections/?query=moe').then(
         response => response.json()
       ).then(data => {
-        setAllPerformances(data.result);
+        const result = data.result;
+        const performanceData = Object.assign(
+          {},
+          ...result.map(performance => ({[performance.metadata.identifier]: performance}))
+        );
+        setAllPerformances(performanceData);
         setIsLoading(false);  // set loading to false here, after data is loaded asnchronously.
       });
     };
@@ -40,8 +45,8 @@ function App() {
           <Card.Img variant="top" src="holder.js/100px180" />
           <Card.Body>
             <Card.Title>{performance.metadata.title}</Card.Title>
-            <Button onClick={() => renderSongs(performance)}>
-              {`Show songs`}
+            <Button onClick={() => setPlaylist(performance.songs)}>
+              Show songs
             </Button>
           </Card.Body>
         </Card>
@@ -61,15 +66,30 @@ function App() {
               </Toast.Header>
               <Toast.Body>{`Loading performances...`}</Toast.Body>
             </Toast>
-            {allPerformances?.length && (
+            {Object.keys(allPerformances).length && (
               <Container>
                 <CardGroup>
-                  {allPerformances.map(performance => performanceCard(performance))}
+                  {Object.values(allPerformances).map(performance => performanceCard(performance))}
                 </CardGroup>
               </Container>
             )}
           </Col>
-      
+
+          <Col>
+            <p>Playlist</p>
+            {playlist?.length && (
+              playlist.map(song => (
+                <Row key={song.url}>
+                  <Button onClick={() => setCurrentSong(song.url)}>
+                    {song.title}
+                  </Button>
+                </Row>
+              ))
+            )}
+          </Col>
+        </Row>
+
+        <Row>
           <Col>
             <ReactAudioPlayer
               src={currentSong}
