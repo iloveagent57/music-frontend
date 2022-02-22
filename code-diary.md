@@ -4,6 +4,13 @@
 * search box so we can play things other than moe.
 * Get a reliable title/name for every track from the API
 
+# 2022-02-22
+* Work on the general layout of the songs in a performance.
+* Move everything for current performance into a Card, including audio player.
+* Use Accordions to show description and songs for the current performance.
+* Use bootstrap CSS for secondary/primary buttons to distinguish which song is currently playing.
+* Set inner HTML from the metadata description.
+
 # 2022-02-15
 * Got project to a point where there's a playlist container on the left to show songs to click and autoplay.
 * audio player in it's own row at the bottom.

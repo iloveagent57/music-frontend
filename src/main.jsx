@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import ReactAudioPlayer from 'react-audio-player';
+import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import Container from 'react-bootstrap/Container';
@@ -12,8 +13,8 @@ import CardGroup from 'react-bootstrap/CardGroup';
 
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
+  const [currentPerformance, setCurrentPerformance] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [playlist, setPlaylist] = useState([]);
   const [allPerformances, setAllPerformances] = useState({});
 
   useEffect(() => {
@@ -34,10 +35,6 @@ function App() {
     fetchPerformances();
   }, [setAllPerformances]);
 
-  const renderSongs = function(performance) {
-    
-  };
-
   const performanceCard = (performance) => {
     return (
       <Col lg={`auto`}>
@@ -45,12 +42,64 @@ function App() {
           <Card.Img variant="top" src="holder.js/100px180" />
           <Card.Body>
             <Card.Title>{performance.metadata.title}</Card.Title>
-            <Button onClick={() => setPlaylist(performance.songs)}>
+            <Button onClick={() => setCurrentPerformance(performance)}>
               Show songs
             </Button>
           </Card.Body>
         </Card>
       </Col>
+    );
+  };
+
+  const performanceDetails = (performance) => {
+    return (
+      <Card>
+        <Card.Body>
+          <Card.Title>{performance.metadata.title}</Card.Title>
+          <Card.Subtitle>{performance.metadata.date}</Card.Subtitle>
+
+          <Row>
+            <Col>
+              {currentSong && 
+               <ReactAudioPlayer
+                 src={currentSong.url}
+                 controls
+                 autoPlay={true}
+               />
+              }
+            </Col>
+          </Row>
+
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Songs</Accordion.Header>
+              <Accordion.Body>
+                {currentPerformance.songs.map(song => (
+                  <Row key={song.url}>
+                    <Button
+                      onClick={() => setCurrentSong(song)}
+                      className={(song.url == currentSong?.url) ? 'btn-primary': 'btn-secondary'}
+                    >
+                      <Row>
+                        <Col>{song.title || song.track}</Col>
+                        <Col>{song.length}</Col>
+                      </Row>
+                    </Button>
+                  </Row>
+                ))}
+              </Accordion.Body>
+            </Accordion.Item>
+
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>Description</Accordion.Header>
+              <Accordion.Body>
+                <div dangerouslySetInnerHTML={{ __html: performance.metadata.description }}/>
+              </Accordion.Body>
+            </Accordion.Item>
+
+          </Accordion>
+        </Card.Body>
+      </Card>
     );
   };
 
@@ -76,28 +125,10 @@ function App() {
           </Col>
 
           <Col>
-            <p>Playlist</p>
-            {playlist?.length && (
-              playlist.map(song => (
-                <Row key={song.url}>
-                  <Button onClick={() => setCurrentSong(song.url)}>
-                    {song.title}
-                  </Button>
-                </Row>
-              ))
-            )}
+            {currentPerformance && performanceDetails(currentPerformance)}
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <ReactAudioPlayer
-              src={currentSong}
-              controls
-              autoPlay={true}
-            />
-          </Col>
-        </Row>
       </Container>
     </React.Fragment>
   );
